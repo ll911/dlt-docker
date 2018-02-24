@@ -1,20 +1,14 @@
 FROM python:alpine3.7
 MAINTAINER leo.lou@gov.bc.ca
 
-ENV LANG=C.UTF-8 \
-    GLIBC_VERSION=2.27-r0
+ENV LANG=C.UTF-8
 
-ARG dep="alpine-sdk gfortran build-base libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack openblas openblas-dev git"
+ARG dep="alpine-sdk gfortran build-base libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack openblas openblas-dev git musl-dev python3-dev"
  
 #Patch GLIBC
 RUN apk upgrade --update && apk add --no-cache --update $dep && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h && \
-    for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION} glibc-i18n-${GLIBC_VERSION}; do curl -sSL https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk -o /tmp/${pkg}.apk; done && \
-    apk add --allow-untrusted /tmp/*.apk && \
-    rm -v /tmp/*.apk && \
-    ( /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ) && \
-    echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
-    /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib
+    rm -v /tmp/*.apk
 
 COPY runme /bin/runme
 
