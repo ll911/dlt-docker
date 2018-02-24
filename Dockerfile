@@ -9,8 +9,8 @@ ARG dep="ca-certificates libstdc++ libgfortran python3 git curl"
 ARG tbc="gfortran g++ make python3-dev"
 
 RUN apk update \
-&& apk add $dep
-&& apk add --virtual=.dev $tbc
+&& apk add $dep \
+&& apk add --virtual=.dev $tbc \
 && ln -s /usr/include/locale.h /usr/include/xlocale.h \
 && mkdir -p /tmp/build \
 && cd /tmp/build/ \
