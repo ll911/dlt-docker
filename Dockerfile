@@ -7,7 +7,7 @@ ARG dep="libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack open
 ARG tbc="alpine-sdk gfortran build-base git musl-dev python3-dev"
 
 RUN apk upgrade --update && apk add --no-cache --update $dep && \
-    apk add --no-cache --virtual=dev $tbc && \
+    apk add --no-cache --virtual=.dev $tbc && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 COPY runme /bin/runme
