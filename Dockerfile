@@ -5,6 +5,10 @@ MAINTAINER leo.lou@gov.bc.ca
 ENV BLAS_VERSION=3.6.0 \
     LAPACK_VERSION=3.6.1
 
+ENV numpy_WHL=https://pypi.python.org/packages/59/e2/57c1a6af4ff0ac095dd68b12bf07771813dbf401faf1b97f5fc0cb963647/numpy-1.13.1-cp36-cp36m-manylinux1_x86_64.whl \
+    panda_WHL=https://pypi.python.org/packages/fe/6f/5733658857dffb998afa2120027171c263384ada0487a969e5ecd5bf9ac9/pandas-0.20.3-cp36-cp36m-manylinux1_x86_64.whl
+
+
 ARG dep="ca-certificates libstdc++ libgfortran python3 git curl"
 ARG tbc="gfortran g++ make python3-dev"
 
@@ -40,7 +44,10 @@ RUN mkdir /app \
  && chmod 755 /bin/runme \
  && git clone $dlt_web /tmp/ui/ \
  && git clone $dlt_core /tmp/dl \
- && $apip install --no-cache-dir numpy==1.13.1 pandas==0.20.3 matplotlib \
+ && wget -O /tmp/numpy-1.13.1-cp36-cp36m-manylinux1_x86_64.whl $numpy_WHL \
+ && wget -O /tmp/pandas-0.20.3-cp36-cp36m-manylinux1_x86_64.whl $panda_WHL \
+ && $apip install /tmp/numpy-1.13.1-cp36-cp36m-manylinux1_x86_64.whl \
+ && $apip install /tmp/pandas-0.20.3-cp36-cp36m-manylinux1_x86_64.whl \
  && $apip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
  && $apip install -r /tmp/dl/requirements/base.txt \
  && cp -r /tmp/ui/web-app /app/ \
