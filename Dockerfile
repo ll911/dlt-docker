@@ -22,8 +22,8 @@ COPY runme /bin/runme
 
 RUN mkdir /app \
  && chmod 755 /bin/runme \
- && git clone $dlt-web /tmp/ui/ \
- && git clone $dlt-core /tmp/dl \
+ && git clone $dlt_web /tmp/ui/ \
+ && git clone $dlt_core /tmp/dl \
  && pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
  && pip install -r /tmp/dl/requirements/base.txt \
  && cp -r /tmp/ui/web-app /app/ \
