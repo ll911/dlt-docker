@@ -1,0 +1,14 @@
+#!/bin/sh
+djangoenv=/app/web-app/config/settings/.env
+dlworkerenv=/app/linkage-worker/.env
+
+if [ ! -f "$djangoenv" ]; then
+ printf "CELERY_BROKER_URL='redis://:$CBP@datalinking:6379/1'\nLOGGING_LEVEL=DEBUG" > $djangoenv
+fi
+
+if [ ! -f "$dlworkerenv" ]; then
+ printf "CELERY_BROKER_URL=redis://:$CBP@datalinking:6379/1" > $dlworkerenv
+fi
+
+export `cat $dlworkerenv`
+cd /app/linkage-worker && celery -A tasks worker -l INFO -b $CELERY_BROKER_URL & cd /app/web-app && python manage.py collectstatic --noinput && gunicorn --chdir $APP_ROOT/web-app config.wsgi -k gevent -b :8080
