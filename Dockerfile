@@ -50,9 +50,15 @@ RUN mkdir /app \
  && mv /tmp/ui/linkage-worker/link-server /app/linkage-worker \
  && mv /tmp/dl /app/linkage-worker/lib \
  && $apip install -e /app/linkage-worker/lib/cdi-linking \
- && $apip install -e /app/linkage-worker/lib/linking_ext \
- && rm -rf /tmp/*
+ && $apip install -e /app/linkage-worker/lib/linking_ext
 #end of dlt install
+
+#cleanup
+RUN \
+ && apk del --purge -r .dev \
+ && rm -rf /tmp/* \
+ && rm -rf /var/cache/apk/*
+#end of cleanup 
 
 RUN adduser -S 1001
 RUN chown -R 1001:0 /app && chmod -R 770 /app
