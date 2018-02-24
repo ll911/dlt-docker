@@ -54,7 +54,7 @@ RUN mkdir /app \
 #end of dlt install
 
 #cleanup
-RUN \
+RUN unset BLAS LAPACK \
  && apk del --purge -r .dev \
  && rm -rf /tmp/* \
  && rm -rf /var/cache/apk/*
