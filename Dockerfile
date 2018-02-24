@@ -1,6 +1,10 @@
 FROM alpine:latest
 MAINTAINER leo.lou@gov.bc.ca
 
+ENV BLAS_VERSION=3.6.0 \
+    LAPACK_VERSION=3.6.1
+
+
 RUN apk update \
 && apk add \
     ca-certificates \
@@ -15,11 +19,11 @@ RUN apk update \
 && ln -s /usr/include/locale.h /usr/include/xlocale.h \
 && mkdir -p /tmp/build \
 && cd /tmp/build/ \
-&& wget http://www.netlib.org/blas/blas-3.6.0.tgz \
-&& wget http://www.netlib.org/lapack/lapack-3.6.1.tgz \
-&& tar xzf blas-3.6.0.tgz \
-&& tar xzf lapack-3.6.1.tgz \
-&& cd /tmp/build/BLAS-3.6.0/ \
+&& wget http://www.netlib.org/blas/blas-$BLAS_VERSION.tgz \
+&& wget http://www.netlib.org/lapack/lapack-$LAPACK_VERSION.tgz \
+&& tar xzf blas-$BLAS_VERSION.tgz \
+&& tar xzf lapack-$LAPACK_VERSION.tgz \
+&& cd /tmp/build/BLAS-$BLAS_VERSION/ \
 && gfortran -O3 -std=legacy -m64 -fno-second-underscore -fPIC -c *.f \
 && ar r libfblas.a *.o \
 && ranlib libfblas.a \
