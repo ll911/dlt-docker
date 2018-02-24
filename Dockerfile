@@ -3,12 +3,12 @@ MAINTAINER leo.lou@gov.bc.ca
 
 ENV LANG=C.UTF-8
 
-ARG dep="alpine-sdk gfortran build-base libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack openblas openblas-dev git musl-dev python3-dev"
- 
-#Patch GLIBC
+ARG dep="libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack openblas openblas-dev"
+ARG tbc="alpine-sdk gfortran build-base git musl-dev python3-dev"
+
 RUN apk upgrade --update && apk add --no-cache --update $dep && \
-    ln -s /usr/include/locale.h /usr/include/xlocale.h && \
-    rm -v /tmp/*.apk
+    apk add --no-cache --virtual=dev $tbc && \
+    ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 COPY runme /bin/runme
 
