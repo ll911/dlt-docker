@@ -3,8 +3,8 @@ MAINTAINER leo.lou@gov.bc.ca
 
 ARG dep="libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack openblas git"
 ARG tbc="alpine-sdk gfortran build-base python3-dev openblas-dev"
-ENV numpy_WHL=https://pypi.python.org/packages/b9/35/dfe4ea1ac0df18168939841c119a320745aee1f45dd74c2e1477a383d330/numpy-1.13.1-cp36-cp36m-manylinux1_i686.whl \
-    panda_WHL=https://pypi.python.org/packages/91/f3/f5268fe395471a0e9686821477af5297655f437782cccbc43e41480a2bd8/pandas-0.20.3-cp36-cp36m-manylinux1_i686.whl
+ENV numpy_SRC=https://pypi.python.org/packages/c0/3a/40967d9f5675fbb097ffec170f59c2ba19fc96373e73ad47c2cae9a30aed/numpy-1.13.1.zip \
+    panda_SRC=https://pypi.python.org/packages/ee/aa/90c06f249cf4408fa75135ad0df7d64c09cf74c9870733862491ed5f3a50/pandas-0.20.3.tar.gz
 
 RUN \
    apk add --no-cache --update $dep && \
@@ -17,10 +17,10 @@ RUN mkdir /app \
  && chmod 755 /bin/runme \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking-ui /tmp/ui/ \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking /tmp/dl \
- && wget -O /tmp/numpy-1.13.1-cp36-cp36m-manylinux1_i686.whl $numpy_WHL \
- && wget -O /tmp/pandas-0.20.3-cp36-cp36m-manylinux1_i686.whl $panda_WHL \
- && pip install /tmp/numpy*.whl \
- && pip install /tmp/pandas*.whl \
+ && wget -O /tmp/numpysrc $numpy_SRC && tar xvf /tmp/numpysrc \
+ && wget -O /tmp/pandasrc $panda_SRC && tar xvf /tmp/pandasrc \
+ && pip install /tmp/numpy-1.13.1 \
+ && pip install /tmp/pandas-0.20.3 \
  && pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
  && pip install -r /tmp/dl/requirements/base.txt \
  && cp -r /tmp/ui/web-app /app/ \
