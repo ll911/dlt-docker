@@ -18,7 +18,7 @@ RUN mkdir /app \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking-ui /tmp/ui/ \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking /tmp/dl \
  && wget -O /tmp/numpysrc $numpy_SRC && tar xvf /tmp/numpysrc \
- && wget -O /tmp/pandasrc $panda_SRC && tar xvf /tmp/pandasrc \
+ && wget -O /tmp/pandasrc $panda_SRC && tar xvf /tmp/pandasrc -c /tmp \
  && pip install /tmp/numpy-1.13.1 \
  && pip install /tmp/pandas-0.20.3 \
  && pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
