@@ -5,7 +5,7 @@ MAINTAINER leo.lou@gov.bc.ca
 ENV BLAS_VERSION=3.6.0 \
     LAPACK_VERSION=3.6.1
 
-ARG dep="ca-certificates libstdc++ libgfortran python3"
+ARG dep="ca-certificates libstdc++ libgfortran python3 git curl"
 ARG tbc="gfortran g++ make python3-dev"
 
 RUN apk update \
