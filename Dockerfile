@@ -43,7 +43,7 @@ RUN mkdir /app \
  && chmod 755 /bin/runme \
  && git clone $dlt_web /tmp/ui/ \
  && git clone $dlt_core /tmp/dl \
- && python3 -m pip install --no-cache-dir numpy==1.13.1 scipy pandas==0.20.3 matplotlib \
+ && python3 -m pip install --no-cache-dir numpy==1.13.1 pandas==0.20.3 matplotlib \
  && python3 -m pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
  && python3 -m pip install -r /tmp/dl/requirements/base.txt \
  && cp -r /tmp/ui/web-app /app/ \
