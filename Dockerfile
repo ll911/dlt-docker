@@ -1,8 +1,8 @@
 FROM python:alpine3.7
 MAINTAINER leo.lou@gov.bc.ca
 
-ARG dep="libstdc++ curl wget ca-certificates lapack openblas git freetype lcms2 libjpeg-turbo libwebp musl openjpeg tiff zlib"
-ARG tbc="alpine-sdk linux-headers gfortran build-base python3-dev openblas-dev libffi-dev freetype-dev libpng-dev jpeg-dev zlib-dev lcms2-dev openjpeg-dev tiff-dev py3-tz py3-dateutil libxml2-dev"
+ARG dep="libstdc++ curl wget ca-certificates lapack openblas git freetype lcms2 libjpeg-turbo libwebp musl openjpeg tiff zlib libxslt libxml2"
+ARG tbc="alpine-sdk linux-headers gfortran build-base python3-dev openblas-dev libffi-dev freetype-dev libpng-dev jpeg-dev zlib-dev lcms2-dev openjpeg-dev tiff-dev py3-tz py3-dateutil libxslt-dev libxml2-dev"
 
 ENV NUMPY_VER=1.13.1 \
     PANDA_VER=0.20.3
