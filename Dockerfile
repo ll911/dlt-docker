@@ -21,7 +21,7 @@ RUN mkdir /app \
  && pip wheel numpy==1.13.1 \
  && pip install numpy==1.13.1 \
  && pip wheel pandas==0.20.3 \
- && pip install pandas==0.20.3
+ && pip install pandas==0.20.3 \
  && pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
  && pip install -r /tmp/dl/requirements/base.txt \
  && cp -r /tmp/ui/web-app /app/ \
