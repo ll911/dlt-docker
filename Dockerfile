@@ -17,8 +17,11 @@ RUN mkdir /app \
  && chmod 755 /bin/runme \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking-ui /tmp/ui/ \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking /tmp/dl \
+ && export WHEELHOUSE="/tmp/.wheelhouse" \
+ && export PIP_FIND_LINKS="file://${WHEELHOUSE}" \
+ && export PIP_WHEEL_DIR="${WHEELHOUSE}" \
  && pip wheel numpy==1.13.1 \
- && pip install numpy==1.13.1
+ && pip install numpy==1.13.1 \
  && pip wheel pandas==0.20.3 \
  && pip install pandas==0.20.3
  && pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
