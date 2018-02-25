@@ -2,7 +2,7 @@ FROM python:alpine3.7
 MAINTAINER leo.lou@gov.bc.ca
 
 ARG dep="libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack openblas git"
-ARG tbc="alpine-sdk gfortran build-base python3-dev openblas-dev"
+ARG tbc="alpine-sdk gfortran build-base openblas-dev"
 ENV numpy_SRC=https://pypi.python.org/packages/c0/3a/40967d9f5675fbb097ffec170f59c2ba19fc96373e73ad47c2cae9a30aed/numpy-1.13.1.zip \
     panda_SRC=https://pypi.python.org/packages/ee/aa/90c06f249cf4408fa75135ad0df7d64c09cf74c9870733862491ed5f3a50/pandas-0.20.3.tar.gz
 
@@ -17,10 +17,10 @@ RUN mkdir /app \
  && chmod 755 /bin/runme \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking-ui /tmp/ui/ \
  && git clone https://gogs.data.gov.bc.ca/leolou/data-linking /tmp/dl \
- && wget -O /tmp/numpysrc $numpy_SRC && tar xvf /tmp/numpysrc \
- && wget -O /tmp/pandasrc $panda_SRC && tar xvf /tmp/pandasrc -c /tmp \
- && pip install /tmp/numpy-1.13.1 \
- && pip install /tmp/pandas-0.20.3 \
+ && pip wheel numpy==1.13.1 \
+ && pip install numpy==1.13.1
+ && pip wheel pandas==0.20.3 \
+ && pip install pandas==0.20.3
  && pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
  && pip install -r /tmp/dl/requirements/base.txt \
  && cp -r /tmp/ui/web-app /app/ \
