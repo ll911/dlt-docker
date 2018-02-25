@@ -1,12 +1,19 @@
 FROM python:alpine3.7
 MAINTAINER leo.lou@gov.bc.ca
 
-ARG dep="libstdc++ curl wget ca-certificates freetype-dev libpng-dev lapack openblas git"
-ARG tbc="alpine-sdk gfortran build-base openblas-dev"
+ARG dep="libstdc++ curl wget ca-certificates lapack openblas git freetype lcms2 libjpeg-turbo libwebp musl openjpeg tiff zlib"
+ARG tbc="alpine-sdk linux-headers gfortran build-base python3-dev openblas-dev libffi-dev freetype-dev libpng-dev jpeg-dev zlib-dev lcms2-dev openjpeg-dev tiff-dev py3-tz py3-dateutil libxml2-dev"
+
+ENV NUMPY_VER=1.13.1 \
+    PANDA_VER=0.20.3
+ENV numpy_SRC=https://github.com/numpy/numpy/releases/download/v$NUMPY_VER/numpy-$NUMPY_VER.tar.gz \
+    panda_SRC=https://github.com/pandas-dev/pandas/archive/v$PANDA_VER.tar.gz
 
 RUN \
    apk add --no-cache --update $dep && \
-   apk add --virtual=.dev $tbc && \
+   apk add --no-cache --virtual=.dev $tbc && \
+   echo "@leg http://dl-4.alpinelinux.org/alpine/v3.4/main" >> /etc/apk/repositories && \
+   apk add --no-cache postgresql-dev@leg && \
    ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 COPY runme /bin/runme
@@ -18,10 +25,14 @@ RUN mkdir /app \
  && export WHEELHOUSE="/tmp/.wheelhouse" \
  && export PIP_FIND_LINKS="file://${WHEELHOUSE}" \
  && export PIP_WHEEL_DIR="${WHEELHOUSE}" \
- && pip wheel numpy==1.13.1 \
- && pip install numpy==1.13.1 \
- && pip wheel pandas==0.20.3 \
- && pip install pandas==0.20.3 \
+ && pip wheel cython && pip install cython \
+ && wget -O /tmp/numpysrc $numpy_SRC && tar xvf /tmp/numpysrc -C /tmp \
+ && wget -O /tmp/pandasrc $panda_SRC && tar xvf /tmp/pandasrc -C /tmp \
+ && export NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
+ && cd /tmp/numpy-$NUMPY_VER && cp site.cfg.example site.cfg \
+ && echo -en "\n[openblas]\nlibraries = openblas\nlibrary_dirs = /usr/lib\ninclude_dirs = /usr/include\n" >> site.cfg \
+ && python setup.py build -j ${NPROC} --fcompiler=gfortran install \
+ && cd /tmp/pandas-$PANDA_VER && python setup.py build -j ${NPROC} install \
  && pip install -r /tmp/ui/linkage-worker/link-server/requirements.txt \
  && pip install -r /tmp/dl/requirements/base.txt \
  && cp -r /tmp/ui/web-app /app/ \
